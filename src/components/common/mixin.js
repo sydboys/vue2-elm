@@ -1,5 +1,5 @@
-import { getStyle } from '../../config/mUtils'
-import { imgBaseUrl, localapi, proapi } from '../../config/env'
+import {getStyle} from '../../config/mUtils';
+import {imgBaseUrl, localapi, proapi} from '../../config/env';
 
 export const loadMore = {
 	directives: {
@@ -24,43 +24,55 @@ export const loadMore = {
 					heightEl = el;
 				}
 
-				el.addEventListener('touchstart', () => {
-					height = heightEl.clientHeight;
-					if (scrollType == 2) {
-						height = height
-					}
-					setTop = el.offsetTop;
-					paddingBottom = getStyle(el, 'paddingBottom');
-					marginBottom = getStyle(el, 'marginBottom');
-				}, false)
+				el.addEventListener(
+					'touchstart',
+					() => {
+						height = heightEl.clientHeight;
+						if (scrollType == 2) {
+							height = height;
+						}
+						setTop = el.offsetTop;
+						paddingBottom = getStyle(el, 'paddingBottom');
+						marginBottom = getStyle(el, 'marginBottom');
+					},
+					false
+				);
 
-				el.addEventListener('touchmove', () => {
-					loadMore();
-				}, false)
+				el.addEventListener(
+					'touchmove',
+					() => {
+						loadMore();
+					},
+					false
+				);
 
-				el.addEventListener('touchend', () => {
-					oldScrollTop = scrollEl.scrollTop;
-					moveEnd();
-				}, false)
+				el.addEventListener(
+					'touchend',
+					() => {
+						oldScrollTop = scrollEl.scrollTop;
+						moveEnd();
+					},
+					false
+				);
 
 				const moveEnd = () => {
 					requestFram = requestAnimationFrame(() => {
 						if (scrollEl.scrollTop != oldScrollTop) {
 							oldScrollTop = scrollEl.scrollTop;
-							moveEnd()
+							moveEnd();
 						} else {
 							cancelAnimationFrame(requestFram);
 							height = heightEl.clientHeight;
 							loadMore();
 						}
-					})
-				}
+					});
+				};
 
 				const loadMore = () => {
 					if (scrollEl.scrollTop + windowHeight >= height + setTop + paddingBottom + marginBottom - scrollReduce) {
 						binding.value();
 					}
-				}
+				};
 			}
 		}
 	}
@@ -72,16 +84,15 @@ export const getImgPath = {
 		getImgPath(path) {
 			let suffix;
 			if (!path) {
-				return '//elm.cangdu.org/img/default.jpg'
+				return '//elm.cangdu.org/img/default.jpg';
 			}
 			if (path.indexOf('jpeg') !== -1) {
-				suffix = '.jpeg'
+				suffix = '.jpeg';
 			} else {
-				suffix = '.png'
+				suffix = '.png';
 			}
 			let url = '/' + path.substr(0, 1) + '/' + path.substr(1, 2) + '/' + path.substr(3) + suffix;
-			return 'https://fuss10.elemecdn.com' + url
-		},
+			return 'https://fuss10.elemecdn.com' + url;
+		}
 	}
-
-}
+};

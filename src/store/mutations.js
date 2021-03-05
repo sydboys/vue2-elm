@@ -27,19 +27,16 @@ import {
 	SAVE_ADDDETAIL,
 	SAVE_QUESTION,
 	ADD_ADDRESS,
-	BUY_CART,
-} from './mutation-types.js'
+	BUY_CART
+} from './mutation-types.js';
 
-import {setStore, getStore} from '../config/mUtils'
+import {setStore, getStore} from '../config/mUtils';
 
-import {localapi, proapi} from 'src/config/env'
+import {localapi, proapi} from 'src/config/env';
 
 export default {
 	// 记录当前经度纬度
-	[RECORD_ADDRESS](state, {
-		latitude,
-		longitude
-	}) {
+	[RECORD_ADDRESS](state, {latitude, longitude}) {
 		state.latitude = latitude;
 		state.longitude = longitude;
 	},
@@ -48,34 +45,23 @@ export default {
 		state.shopDetail = detail;
 	},
 	// 加入购物车
-	[ADD_CART](state, {
-		shopid,
-		category_id,
-		item_id,
-		food_id,
-		name,
-		price,
-		specs,
-		packing_fee,
-		sku_id,
-		stock
-	}) {
+	[ADD_CART](state, {shopid, category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock}) {
 		let cart = state.cartList;
-		let shop = cart[shopid] = (cart[shopid] || {});
-		let category = shop[category_id] = (shop[category_id] || {});
-		let item = category[item_id] = (category[item_id] || {});
+		let shop = (cart[shopid] = cart[shopid] || {});
+		let category = (shop[category_id] = shop[category_id] || {});
+		let item = (category[item_id] = category[item_id] || {});
 		if (item[food_id]) {
 			item[food_id]['num']++;
 		} else {
 			item[food_id] = {
-					"num" : 1,
-					"id" : food_id,
-					"name" : name,
-					"price" : price,
-					"specs" : specs,
-					"packing_fee" : packing_fee,
-					"sku_id" : sku_id,
-					"stock" : stock
+				num: 1,
+				id: food_id,
+				name: name,
+				price: price,
+				specs: specs,
+				packing_fee: packing_fee,
+				sku_id: sku_id,
+				stock: stock
 			};
 		}
 		state.cartList = {...cart};
@@ -83,19 +69,11 @@ export default {
 		setStore('buyCart', state.cartList);
 	},
 	// 移出购物车
-	[REDUCE_CART](state, {
-		shopid,
-		category_id,
-		item_id,
-		food_id,
-		name,
-		price,
-		specs,
-	}) {
+	[REDUCE_CART](state, {shopid, category_id, item_id, food_id, name, price, specs}) {
 		let cart = state.cartList;
-		let shop = (cart[shopid] || {});
-		let category = (shop[category_id] || {});
-		let item = (category[item_id] || {});
+		let shop = cart[shopid] || {};
+		let category = shop[category_id] || {};
+		let item = category[item_id] || {};
 		if (item && item[food_id]) {
 			if (item[food_id]['num'] > 0) {
 				item[food_id]['num']--;
@@ -129,11 +107,11 @@ export default {
 	},
 	//获取用户信息存入vuex
 	[GET_USERINFO](state, info) {
-		if (state.userInfo && (state.userInfo.username !== info.username)) {
+		if (state.userInfo && state.userInfo.username !== info.username) {
 			return;
-		};
+		}
 		if (!state.login) {
-			return
+			return;
 		}
 		if (!info.message) {
 			state.userInfo = {...info};
@@ -142,18 +120,15 @@ export default {
 		}
 	},
 	//修改用户名
-	[RETSET_NAME](state,username) {
-		state.userInfo = Object.assign({}, state.userInfo,{username})
+	[RETSET_NAME](state, username) {
+		state.userInfo = Object.assign({}, state.userInfo, {username});
 	},
 	//保存商铺id
 	[SAVE_SHOPID](state, shopid) {
 		state.shopid = shopid;
 	},
 	//记录订单页面用户选择的备注, 传递给订单确认页面
-	[CONFIRM_REMARK](state, {
-		remarkText,
-		inputText
-	}) {
+	[CONFIRM_REMARK](state, {remarkText, inputText}) {
 		state.remarkText = remarkText;
 		state.inputText = inputText;
 	},
@@ -168,17 +143,13 @@ export default {
 	//保存geohash
 	[SAVE_GEOHASH](state, geohash) {
 		state.geohash = geohash;
-		
 	},
 	//确认订单页添加新的的地址
 	[CONFIRM_ADDRESS](state, newAddress) {
 		state.newAddress.push(newAddress);
 	},
 	//选择的地址
-	[CHOOSE_ADDRESS](state, {
-		address,
-		index
-	}) {
+	[CHOOSE_ADDRESS](state, {address, index}) {
 		state.choosedAddress = address;
 		state.addressIndex = index;
 	},
@@ -187,10 +158,7 @@ export default {
 		state.needValidation = needValidation;
 	},
 	//保存下单后购物id 和 sig
-	[SAVE_CART_ID_SIG](state, {
-		cart_id,
-		sig
-	}) {
+	[SAVE_CART_ID_SIG](state, {cart_id, sig}) {
 		state.cart_id = cart_id;
 		state.sig = sig;
 	},
@@ -222,11 +190,11 @@ export default {
 	},
 	//删除地址列表
 	[SAVE_ADDRESS](state, newAdress) {
-		state.removeAddress = newAdress
+		state.removeAddress = newAdress;
 	},
 	//添加地址name
-	[SAVE_ADDDETAIL](state, addAddress){
-		state.addAddress=addAddress;
+	[SAVE_ADDDETAIL](state, addAddress) {
+		state.addAddress = addAddress;
 	},
 	//保存所选问题标题和详情
 	[SAVE_QUESTION](state, question) {
@@ -239,6 +207,5 @@ export default {
 	//会员卡价格纪录
 	[BUY_CART](state, price) {
 		state.cartPrice = price;
-	},
-
-}
+	}
+};
